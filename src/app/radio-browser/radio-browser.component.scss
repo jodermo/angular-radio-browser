@@ -1,0 +1,144 @@
+.web-radio {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .inside {
+    position: relative;
+    width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    .audio-player {
+      .progressbar {
+        position: relative;
+        width: 100%;
+        height: .5rem;
+        background: rgba(0, 0, 0, 0.5);
+
+        .progressbar-fill {
+          height: 100%;
+          background: rgba(255, 255, 255, 1);
+        }
+      }
+
+      .audio-player-controls {
+        position: relative;
+        width: 100%;
+        display: flex;
+        height: 3rem;
+        line-height: 2rem;
+
+        & > * {
+          flex: 1;
+
+          &.progress-info {
+            flex: 3;
+            padding: .5rem;
+            text-align: center;
+          }
+        }
+
+
+        .button-placeholder {
+          flex: 3;
+          background: #000;
+          text-align: center;
+        }
+
+
+      }
+
+
+    }
+
+    .audio-player-filter {
+      background: #000;
+
+      .filter-group {
+
+        position: relative;
+        width: 100%;
+        display: flex;
+      }
+
+      label {
+        position: relative;
+        width: 100%;
+        display: flex;
+        padding: .75rem .5rem .5rem .5rem;
+
+        span {
+          position: absolute;
+          padding: 0 .5rem;
+          text-align: right;
+          transform: translateY(-90%);
+          font-size: .5rem;
+        }
+
+        input, select{
+          margin: 0;
+          padding: .25rem;
+        }
+
+        & > * {
+          flex: 1;
+        }
+      }
+    }
+
+    .radio-search-results {
+      overflow-x: hidden;
+      overflow-y: auto;
+      flex: 1;
+
+      .radio-search-results-list {
+        list-style: none;
+        padding: 0 0 3rem 0;
+        margin: 0;
+
+        .radio-search-results-item {
+          position: relative;
+          border: 1px solid transparent;
+          width: 100%;
+          height: auto;
+          cursor: pointer;
+          transition: all .5s ease;
+          color: #fff;
+
+          &:hover {
+            background: #000;
+          }
+
+          &.active {
+            border: 1px solid #fff;
+            background: #000;
+
+          }
+        }
+
+        li:last-child {
+          padding: .5rem;
+        }
+      }
+    }
+  }
+}
+
+
+app-radio-preview {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: auto;
+}
+

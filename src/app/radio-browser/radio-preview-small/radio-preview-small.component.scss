@@ -1,0 +1,31 @@
+.radio-preview-small {
+  display: flex;
+  padding: .5rem;
+
+  .radio-favicon {
+    height: 2rem;
+    width: auto;
+    float: left;
+    margin-right: .5rem;
+  }
+
+  .radio-name {
+
+
+  }
+
+  div {
+    flex: 1;
+  }
+
+  .radio-preview-small-controls {
+    display: flex;
+
+    & > * {
+      flex: 1;
+    }
+  }
+
+}
+
+

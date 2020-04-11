@@ -1,0 +1,97 @@
+<div class="radio-header" *ngIf="details">
+  <div class="radio-name">
+    <span><b>{{radio.name}}</b></span>
+    <span *ngIf="radio.country">/{{radio.country}}</span>
+    <span *ngIf="radio.language">/{{radio.language}}</span>
+  </div>
+</div>
+<div class="radio-body" *ngIf="!details">
+  <div class="radio-thumbnail small">
+    <img *ngIf="radio.favicon" class="radio-favicon" [src]="radio.favicon"/>
+  </div>
+  <div class="radio-info">
+    <div class="radio-name">
+      <span><b>{{radio.name}}</b></span>
+      <span *ngIf="radio.country">/{{radio.country}}</span>
+      <span *ngIf="radio.language">/{{radio.language}}</span>
+    </div>
+  </div>
+</div>
+<div class="radio-body" *ngIf="details">
+  <div class="radio-thumbnail">
+    <img *ngIf="radio.favicon" class="radio-favicon" [src]="radio.favicon"/>
+  </div>
+  <div class="radio-info">
+    <table>
+      <tbody>
+      <tr *ngIf="radio.ip">
+        <th>
+          IP
+        </th>
+        <td>
+          {{radio.ip}}
+        </td>
+      </tr>
+      <tr *ngIf="radio.homepage">
+        <th>
+          Website
+        </th>
+        <td>
+          <a href="{{radio.homepage}}" target="_blank">{{radio.homepage}}</a>
+        </td>
+      </tr>
+      <tr *ngIf="radio.votes">
+        <th>
+          votes
+        </th>
+        <td>
+          {{radio.votes}}
+        </td>
+      </tr>
+      <tr *ngIf="radio.codec">
+        <th>
+          codec
+        </th>
+        <td>
+          {{radio.codec}}
+        </td>
+      </tr>
+      <tr *ngIf="radio.country">
+        <th>
+          country
+        </th>
+        <td>
+          {{radio.country}}
+        </td>
+      </tr>
+      <tr *ngIf="radio.state">
+        <th>
+          state
+        </th>
+        <td>
+          {{radio.state}}
+        </td>
+      </tr>
+      <tr *ngIf="radio.language">
+        <th>
+          language
+        </th>
+        <td>
+          {{radio.language}}
+        </td>
+      </tr>
+      <tr *ngIf="radio.tags">
+        <th>
+          tags
+        </th>
+        <td>
+          {{radio.tags}}
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+

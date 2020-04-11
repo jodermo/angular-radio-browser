@@ -1,0 +1,19 @@
+<div class="radio-preview-small">
+  <div *ngIf="radio.station">
+    <img *ngIf="radio.station.favicon" class="radio-favicon" [src]="radio.station.favicon"/>
+    <div class="radio-name">
+      <span><b>{{radio.station.name}}</b></span><br>
+      <small *ngIf="radio.station.country || radio.station.language">
+        [<span *ngIf="radio.station.country">{{radio.station.country}} </span>
+        <span *ngIf="radio.station.language">{{radio.station.language}}</span>]
+      </small>
+    </div>
+  </div>
+  <div class="radio-preview-small-controls">
+    <button (click)="prev()" *ngIf="showNavigation && radio.audio"><</button>
+    <button (click)="play()" *ngIf="radio.audio && radio.audio.paused">play</button>
+    <button (click)="pause()" *ngIf="radio.audio && !radio.audio.paused">pause</button>
+    <button (click)="close()">close</button>
+    <button (click)="next()" *ngIf="showNavigation && radio.audio">></button>
+  </div>
+</div>
