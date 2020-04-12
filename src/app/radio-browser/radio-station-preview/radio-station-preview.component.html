@@ -1,0 +1,114 @@
+<div class="radio-header" *ngIf="details">
+  <div class="radio-name">
+    <span><b>{{station.name}}</b></span>
+    <small *ngIf="station.country || station.language">
+      [
+      <span *ngIf="station.country">{{station.country}}</span>
+      <span *ngIf="station.country && station.language"> - </span>
+      <span *ngIf="station.language">{{station.language}}</span>
+      ]
+    </small>
+  </div>
+</div>
+<div class="radio-body" *ngIf="!details">
+  <div class="radio-thumbnail small">
+    <img *ngIf="station.favicon" class="radio-favicon" [src]="station.favicon"
+         (error)="radio.errorStationThumbnail($event)"/>
+  </div>
+  <div class="radio-info">
+    <div class="radio-name">
+      <span><b>{{station.name}}</b></span>
+      <small *ngIf="station.country || station.language">
+        [
+        <span *ngIf="station.country">{{station.country}}</span>
+        <span *ngIf="station.country && station.language"> - </span>
+        <span *ngIf="station.language">{{station.language}}</span>
+        ]
+      </small><br>
+      <span *ngIf="station.tags">{{station.tags}}</span>
+      <span class="favorite-star" [ngClass]="{active:(radio.stationIsFavorite(station))}"
+            (click)="radio.toggleFavoriteStation(station, $event)"></span>
+    </div>
+  </div>
+</div>
+<div class="radio-body" *ngIf="details" (click)="radio.scrollToStation()">
+  <div class="radio-thumbnail">
+    <img *ngIf="station.favicon" class="radio-favicon" [src]="station.favicon"
+         (error)="radio.errorStationThumbnail($event)"/>
+    <div class="favorite-star" [ngClass]="{active:(radio.stationIsFavorite(station))}"
+         (click)="radio.toggleFavoriteStation(station, $event)"></div>
+  </div>
+  <div class="radio-info">
+    <table>
+      <tbody>
+      <tr *ngIf="station.ip">
+        <th>
+          IP
+        </th>
+        <td>
+          {{station.ip}}
+        </td>
+      </tr>
+      <tr *ngIf="station.homepage">
+        <th>
+          Website
+        </th>
+        <td>
+          <a href="{{station.homepage}}" target="_blank">{{station.homepage}}</a>
+        </td>
+      </tr>
+      <tr *ngIf="station.votes">
+        <th>
+          votes
+        </th>
+        <td>
+          {{station.votes}}
+        </td>
+      </tr>
+      <tr *ngIf="station.codec">
+        <th>
+          codec
+        </th>
+        <td>
+          {{station.codec}}
+        </td>
+      </tr>
+      <tr *ngIf="station.country">
+        <th>
+          country
+        </th>
+        <td>
+          {{station.country}}
+        </td>
+      </tr>
+      <tr *ngIf="station.state">
+        <th>
+          state
+        </th>
+        <td>
+          {{station.state}}
+        </td>
+      </tr>
+      <tr *ngIf="station.language">
+        <th>
+          language
+        </th>
+        <td>
+          {{station.language}}
+        </td>
+      </tr>
+      <tr *ngIf="station.tags">
+        <th>
+          tags
+        </th>
+        <td>
+          {{station.tags}}
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+

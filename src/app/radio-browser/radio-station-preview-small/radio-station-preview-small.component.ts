@@ -1,19 +1,19 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { RadioPreviewComponent } from '../radio-preview/radio-preview.component';
+import { RadioStationPreviewComponent } from '../radio-station-preview/radio-station-preview.component';
 import { RadioBrowserService } from '../services/radio-browser.service';
 
 @Component({
-  selector: 'app-radio-preview-small',
-  templateUrl: './radio-preview-small.component.html',
-  styleUrls: ['./radio-preview-small.component.scss'],
+  selector: 'app-radio-station-preview-small',
+  templateUrl: './radio-station-preview-small.component.html',
+  styleUrls: ['./radio-station-preview-small.component.scss'],
 })
-export class RadioPreviewSmallComponent extends RadioPreviewComponent {
+export class RadioStationPreviewSmallComponent extends RadioStationPreviewComponent {
   @Input() showNavigation = false;
   @Output()  onClose = new EventEmitter();
 
 
-  constructor(public webRadio: RadioBrowserService) {
-    super(webRadio);
+  constructor(public radio: RadioBrowserService) {
+    super(radio);
 
   }
 
@@ -41,21 +41,21 @@ export class RadioPreviewSmallComponent extends RadioPreviewComponent {
 
 
   prev() {
-    if (this.webRadio) {
-      this.webRadio.selectPrevRadio();
+    if (this.radio) {
+      this.radio.selectPrevStation();
     }
   }
 
   next() {
-    if (this.webRadio) {
-      this.webRadio.selectNextRadio();
+    if (this.radio) {
+      this.radio.selectNextStation();
     }
   }
 
   close() {
     this.pause();
-    if (this.webRadio) {
-      this.webRadio.removeStream();
+    if (this.radio) {
+      this.radio.removeStream();
     }
 
     this.onClose.emit();

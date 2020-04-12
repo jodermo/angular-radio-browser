@@ -1,18 +1,26 @@
+@import "../radio-browser.component";
 
 .radio-header {
   width: 100%;
   background: #000;
   color: #fff;
   padding: .25rem;
+  font-size: 1.5rem;
+  line-height:1.6rem;
 
 }
-
+.radio-header + .radio-body{
+  background: #005c7c;
+}
 .radio-body {
   position: relative;
   width: 100%;
   height: auto;
+  max-height: 500px;
   display: flex;
   padding: .25rem;
+  transition: all .5s ease;
+
 
   .radio-thumbnail {
     position: relative;
@@ -30,28 +38,45 @@
       height: auto;
     }
 
+    .favorite-star {
+      position: absolute;
+      top: .5rem;
+      left: .5rem;
+    }
+
   }
+
 
   .radio-info {
     position: relative;
     padding: 0 .5rem;
     flex: 1;
     border-left: 1px solid #fff;
-    .radio-name{
+
+
+    .radio-name {
       position: relative;
       top: 50%;
       transform: translateY(-50%);
     }
-    th{
+
+    table {
+      font-size: .7rem;
+      color: #ccc;
+    }
+
+    th {
       text-align: right;
 
     }
   }
 }
+
 @media (max-width: 1024px) {
   .radio-body {
     .radio-thumbnail {
       width: 60px;
+
       &.small {
         width: 32px;
       }

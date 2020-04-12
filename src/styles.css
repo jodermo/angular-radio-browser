@@ -1,9 +1,11 @@
 body {
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
+  bottom: 0;
+  right: 0;
   margin: 0;
   padding: 0;
   display: block;
@@ -20,7 +22,7 @@ body {
   font-family: 'Open Sans', sans-serif;
 }
 
-button, input[type="submit"]{
+button, input[type="submit"] {
   background: #000;
   color: #ccc;
   font-weight: bold;
@@ -29,9 +31,24 @@ button, input[type="submit"]{
   transition: all .25s ease;
 }
 
-button:hover, input[type="submit"]:hover{
+button:hover, input[type="submit"]:hover {
   background: #666;
   color: #fff;
+}
+
+button.active, input[type="submit"].active {
+  background: #666;
+  color: #fff;
+  cursor: default;
+}
+
+button.inactive, input[type="submit"].inactive {
+  opacity: .75;
+  pointer-events: none;
+}
+
+button span, input[type="submit"] span {
+  pointer-events: none;
 }
 
 .app-wrapper {
@@ -45,7 +62,7 @@ button:hover, input[type="submit"]:hover{
   position: relative;
   width: 100%;
   height: 2rem;
-  padding: .25rem;
+  padding: .5rem;
   background: #000;
   box-shadow: 0 2px 1rem 0 rgba(0, 0, 0, 0.75);
 }
@@ -73,6 +90,8 @@ button:hover, input[type="submit"]:hover{
   height: 100%;
   margin: 0 auto;
   overflow: hidden;
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.5);
+  padding-bottom: 2rem;
 }
 
 .app-footer {
@@ -81,10 +100,15 @@ button:hover, input[type="submit"]:hover{
   height: 2rem;
   left: 0;
   bottom: 0;
-  padding: .25rem;
+  padding: .5rem;
   background: #000;
   box-shadow: 0 2px 1rem 0 rgba(0, 0, 0, 0.75);
-  text-align: center;
+  text-align: right;
+}
+
+.app-footer .copyright {
+  opacity: .5;
+  float: right;
 }
 
 .app-footer .copyright span {
@@ -93,11 +117,18 @@ button:hover, input[type="submit"]:hover{
 }
 
 .start-view {
-  position: relative;
+  position: fixed;
   width: 100%;
   height: 100%;
+  top:0;
+  left:0;
   padding: 2rem .5rem 3rem .5rem;
   text-align: center;
+  background: #00202d;
+  z-index: 9999;
+}
+.start-view .copyright{
+  opacity: .5;
 }
 
 .start-view .inside {
@@ -114,6 +145,7 @@ button:hover, input[type="submit"]:hover{
   font-size: 2rem;
   line-height: 2.2rem;
 }
+
 .start-view label {
   position: relative;
   display: block;
@@ -144,11 +176,26 @@ button:hover, input[type="submit"]:hover{
   border-bottom-left-radius: 0;
 }
 
+
 @media (max-width: 1024px) {
   body {
     font-size: 10px;
     line-height: 11px;
   }
+  .extended-filter{
+    display: none !important;
+  }
 
+  .app-content {
+    padding-bottom: 0;
+  }
+
+  .app-header{
+    display: none;
+  }
+
+  .copyright-repository, .copyright-email{
+    display: none;
+  }
 
 }

@@ -7,4 +7,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'angular-radio-browser';
+
+  clearStorage(){
+    if(confirm('are you sure? all saved data will be lost')){
+      localStorage.clear();
+      location.reload();
+    }
+
+  }
 }

@@ -20,6 +20,7 @@ export class RadioBrowserService {
     url: 'api.radio-browser.info/json',
     subdomains: ['de1'],
   };
+  defaultStationThumbnail = '/assets/images/radio_placeholder.png';
   searchApiUrl = 'https://de1.api.radio-browser.info/json';
   filter = {
     type: 'stations',
@@ -35,11 +36,11 @@ export class RadioBrowserService {
   filterTypes = [
     {
       name: 'stations',
-      filterBy: ['name', 'country', 'state', 'language', 'tag'], // old: ['name', 'codec', 'country', 'state', 'language', 'tag', 'id', 'uuid']
+      filterBy: ['name', 'country', 'language', 'tag'], // old: ['name', 'codec', 'country', 'state', 'language', 'tag', 'id', 'uuid']
       options: null
     },
   ];
-  oderTypes = ['name', 'url', 'homepage', 'tags', 'country', 'state', 'language']; // old: ['name', 'url', 'homepage', 'favicon', 'tags', 'country', 'state', 'language', 'votes', 'negativevotes', 'codec', 'bitrate', 'lastcheckok', 'lastchecktime', 'clicktimestamp', 'clickcount', 'clicktrend'];
+  oderTypes = ['name', 'country', 'language', 'tags']; // old: ['name', 'url', 'homepage', 'favicon', 'tags', 'country', 'state', 'language', 'votes', 'negativevotes', 'codec', 'bitrate', 'lastcheckok', 'lastchecktime', 'clicktimestamp', 'clickcount', 'clicktrend'];
   currentFilterType = this.filterTypes[0];
   lastSearchQuery;
   searchResult = [] as any;
@@ -49,6 +50,7 @@ export class RadioBrowserService {
   streamUrl = '';
   station = null;
   stationReady = false;
+  favoriteStations = [];
   lastVolume = 1;
   duration = 0;
   durationString = null;
@@ -68,6 +70,7 @@ export class RadioBrowserService {
   init() {
     const searchQuery = localStorage.getItem('radio-filter-value');
     const radioName = localStorage.getItem('radio-station-name');
+    this.getFavoriteStations();
     if (searchQuery) {
       this.selectFilterByType(this.filter.type || this.filterTypes[0].name);
       this.filter.value = radioName;
@@ -180,24 +183,24 @@ export class RadioBrowserService {
   }
 
   searchStationsNew(selectStationName: any = null) {
-      /*
-      RadioBrowser.getStations(filter)
-        .then((data) => {
-          this.searchResult = data;
-          window['radio'].searchResult = this.searchResult;
-          this.searching = false;
-          if (selectStationName) {
-            this.searchResult.forEach(radio => {
-              if (radio.name && radio.name === selectStationName) {
-                return this.selectStation(radio);
-              }
-            });
-          }
-        })
-        .catch((error) => {
-          this.searching = false;
-        });
-       */
+    /*
+    RadioBrowser.getStations(filter)
+      .then((data) => {
+        this.searchResult = data;
+        window['radio'].searchResult = this.searchResult;
+        this.searching = false;
+        if (selectStationName) {
+          this.searchResult.forEach(radio => {
+            if (radio.name && radio.name === selectStationName) {
+              return this.selectStation(radio);
+            }
+          });
+        }
+      })
+      .catch((error) => {
+        this.searching = false;
+      });
+     */
   }
 
   selectStation(station: any) {
@@ -205,10 +208,73 @@ export class RadioBrowserService {
     localStorage.setItem('radio-station-name', station.name || null);
     this.station = station;
     this.streamUrl = station.url;
+    this.scrollToStation(station);
     this.startStream();
   }
 
-  selectNextRadio() {
+  scrollToStation(station = this.station) {
+    if (station.stationuuid) {
+      const elm = document.getElementById('radio_' + station.stationuuid);
+      if (elm) {
+        elm.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
+    }
+  }
+
+  errorStationThumbnail(event) {
+    event.target.src = this.defaultStationThumbnail;
+  }
+
+  getFavoriteStations() {
+    const stations = localStorage.getItem('radio-favorite-stations');
+    this.favoriteStations = JSON.parse(stations) || [];
+  }
+
+  stationIsFavorite(station: any) {
+    for (const fStation of this.favoriteStations) {
+      if (fStation.stationuuid === station.stationuuid) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  setFavoriteStation(station: any, event: Event = null) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    if (!this.stationIsFavorite(station)) {
+      this.favoriteStations.push(station);
+      localStorage.setItem('radio-favorite-stations', JSON.stringify(this.favoriteStations));
+    }
+  }
+
+  unsetFavoriteStation(station: any, event: Event = null) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    for (let i = 0; i < this.favoriteStations.length; i++) {
+      if (this.favoriteStations[i].stationuuid === station.stationuuid) {
+        this.favoriteStations.splice(i, 1);
+      }
+    }
+    localStorage.setItem('radio-favorite-stations', JSON.stringify(this.favoriteStations));
+  }
+
+  toggleFavoriteStation(station: any, event: Event = null) {
+    if (!this.stationIsFavorite(station)) {
+      this.setFavoriteStation(station, event);
+    } else {
+      this.unsetFavoriteStation(station, event);
+    }
+  }
+
+  selectNextStation() {
     if (this.station && this.searchResult) {
       let next = null;
       for (let i = 0; i < this.searchResult.length; i++) {
@@ -228,7 +294,7 @@ export class RadioBrowserService {
     }
   }
 
-  selectPrevRadio() {
+  selectPrevStation() {
     if (this.station && this.searchResult) {
       let next = null;
       for (var i = 0; i < this.searchResult.length; i++) {

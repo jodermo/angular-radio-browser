@@ -8,14 +8,14 @@ import { RadioBrowserService } from './services/radio-browser.service';
 })
 export class RadioBrowserComponent implements OnInit {
   @Output() onPlay = new EventEmitter<HTMLAudioElement>();
+  showFavorites = false;
+
 
   constructor(public radio: RadioBrowserService) {
-    console.log(this.radio);
-    localStorage.clear();
   }
 
   ngOnInit() {
    this.radio.init();
-
   }
+
 }
