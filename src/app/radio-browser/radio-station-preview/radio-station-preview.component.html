@@ -10,35 +10,35 @@
     </small>
   </div>
 </div>
-<div class="radio-body" *ngIf="!details">
+<div class="radio-body {{layout}}" *ngIf="!details">
   <div class="radio-thumbnail small">
     <img *ngIf="station.favicon" class="radio-favicon" [src]="station.favicon"
          (error)="radio.errorStationThumbnail($event)"/>
   </div>
+  <span class="favorite-star" [ngClass]="{active:(radio.stationIsFavorite(station))}"
+        (click)="radio.toggleFavoriteStation(station, $event)"></span>
   <div class="radio-info">
     <div class="radio-name">
       <span><b>{{station.name}}</b></span>
-      <small *ngIf="station.country || station.language">
+      <small *ngIf="layout !== 'grid-layout' && (station.country || station.language)">
         [
         <span *ngIf="station.country">{{station.country}}</span>
         <span *ngIf="station.country && station.language"> - </span>
         <span *ngIf="station.language">{{station.language}}</span>
         ]
       </small><br>
-      <span *ngIf="station.tags">{{station.tags}}</span>
-      <span class="favorite-star" [ngClass]="{active:(radio.stationIsFavorite(station))}"
-            (click)="radio.toggleFavoriteStation(station, $event)"></span>
+      <span *ngIf="layout !== 'grid-layout' && station.tags">{{station.tags}}</span>
     </div>
   </div>
 </div>
-<div class="radio-body" *ngIf="details" (click)="radio.scrollToStation()">
+<div class="radio-body {{layout}}" *ngIf="details" (click)="radio.scrollToStation()">
   <div class="radio-thumbnail">
     <img *ngIf="station.favicon" class="radio-favicon" [src]="station.favicon"
          (error)="radio.errorStationThumbnail($event)"/>
-    <div class="favorite-star" [ngClass]="{active:(radio.stationIsFavorite(station))}"
-         (click)="radio.toggleFavoriteStation(station, $event)"></div>
   </div>
   <div class="radio-info">
+    <div class="favorite-star" [ngClass]="{active:(radio.stationIsFavorite(station))}"
+         (click)="radio.toggleFavoriteStation(station, $event)"></div>
     <table>
       <tbody>
       <tr *ngIf="station.ip">

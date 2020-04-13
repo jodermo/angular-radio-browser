@@ -22,6 +22,7 @@ export class RadioBrowserService {
   };
   defaultStationThumbnail = '/assets/images/radio_placeholder.png';
   searchApiUrl = 'https://de1.api.radio-browser.info/json';
+  connectionTimeout = 5000;
   filter = {
     type: 'stations',
     by: 'name',
@@ -64,6 +65,11 @@ export class RadioBrowserService {
   };
   ready = false;
   showFavorites = false;
+  showOverlay = false;
+  overlayTitle = '';
+  overlayText = '';
+  overlayButtons = null;
+  listLayout = 'grid-layout';
 
   constructor(private http: HttpClient) {
   }
@@ -355,6 +361,30 @@ export class RadioBrowserService {
           this.stationReady = true;
           this.audioState = 'ready';
         });
+        this.audio.addEventListener('loadeddata', (e) => {
+          console.log(e);
+        });
+        this.audio.addEventListener('error', (e) => {
+          console.log('error', e, this.audio.error);
+
+          let message = this.station.name + '\n\n';
+          message += this.streamUrl + '\n\n';
+          message += (this.audio.error.message || 'can´t load ' + this.audio.src) + '\n\n';
+
+          this.showInfoOverlay(message, 'Error ' + this.audio.error.code, [
+            {
+              title: 'OK', event: () => {
+                this.hideInfoOverlay();
+              }
+            },
+            {
+              title: 'Try next station ⏭', event: () => {
+                this.hideInfoOverlay();
+                this.selectNextStation();
+              }
+            }
+          ]);
+        });
       }
       this.audio.autoplay = true;
       // this.audio.crossorigin = 'anonymous';
@@ -495,6 +525,29 @@ export class RadioBrowserService {
     localStorage.removeItem('radio-filter-type');
     localStorage.removeItem('radio-filter-by');
     localStorage.removeItem('radio-filter-value');
+  }
+
+  showInfoOverlay(text = '', title = '', buttons = null) {
+    this.overlayTitle = title;
+    this.overlayText = text;
+    this.overlayButtons = buttons;
+    this.showOverlay = true;
+  }
+
+  hideInfoOverlay() {
+    this.overlayTitle = '';
+    this.overlayText = '';
+    this.overlayButtons = null;
+    this.showOverlay = false;
+  }
+
+  toggleGridLayout() {
+    if (this.listLayout === 'grid-layout') {
+      this.listLayout = 'default-layout'
+    } else {
+      this.listLayout = 'grid-layout'
+    }
+
   }
 
   private handleError(error) {

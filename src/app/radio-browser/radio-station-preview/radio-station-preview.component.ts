@@ -9,6 +9,8 @@ import { RadioBrowserService } from '../services/radio-browser.service';
 export class RadioStationPreviewComponent implements OnInit {
   @Input() station = null;
   @Input() details = false;
+  @Input() layout = 'default-layout';
+
   lastVolume = 1;
 
   constructor(public radio: RadioBrowserService) {
