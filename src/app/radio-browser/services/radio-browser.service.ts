@@ -63,6 +63,7 @@ export class RadioBrowserService {
     onTimeUpdate: []
   };
   ready = false;
+  showFavorites = false;
 
   constructor(private http: HttpClient) {
   }
@@ -132,6 +133,7 @@ export class RadioBrowserService {
   }
 
   searchStations(query = this.filter.value, selectStationName: any = false) {
+    this.showFavorites = false;
     if (query) {
       this.filter.value = query;
       localStorage.setItem('radio-filter-prefix', this.filter.prefix);
@@ -150,6 +152,8 @@ export class RadioBrowserService {
       if (this.filter.reverse) {
         searchUrl += '&reverse=true';
       }
+
+      searchUrl += '&callback=foo';
       if (searchUrl !== this.lastSearchQuery) {
         this.searching = true;
         this.searchResult = [];
@@ -210,6 +214,10 @@ export class RadioBrowserService {
     this.streamUrl = station.url;
     this.scrollToStation(station);
     this.startStream();
+  }
+
+  stationActive(station: any) {
+    return (this.station && station.stationuuid === this.station.stationuuid);
   }
 
   scrollToStation(station = this.station) {
@@ -275,41 +283,49 @@ export class RadioBrowserService {
   }
 
   selectNextStation() {
-    if (this.station && this.searchResult) {
+    let stations = this.searchResult;
+    if (this.showFavorites && this.favoriteStations) {
+      stations = this.favoriteStations;
+    }
+    if (this.station && stations) {
       let next = null;
-      for (let i = 0; i < this.searchResult.length; i++) {
-        if (this.searchResult[i] === this.station) {
-          if (i < this.searchResult.length - 1) {
-            next = this.searchResult[i + 1];
+      for (let i = 0; i < stations.length; i++) {
+        if (stations[i] === this.station) {
+          if (i < stations.length - 1) {
+            next = stations[i + 1];
           } else {
-            next = this.searchResult[0];
+            next = stations[0];
           }
         }
       }
       if (next) {
         this.selectStation(next);
       } else {
-        this.selectStation(this.searchResult[0]);
+        this.selectStation(stations[0]);
       }
     }
   }
 
   selectPrevStation() {
-    if (this.station && this.searchResult) {
+    let stations = this.searchResult;
+    if (this.showFavorites && this.favoriteStations) {
+      stations = this.favoriteStations;
+    }
+    if (this.station && stations) {
       let next = null;
-      for (var i = 0; i < this.searchResult.length; i++) {
-        if (this.searchResult[i] === this.station) {
+      for (let i = 0; i < stations.length; i++) {
+        if (stations[i] === this.station) {
           if (i > 0) {
-            next = this.searchResult[i - 1];
+            next = stations[i - 1];
           } else {
-            next = this.searchResult[this.searchResult.length - 1];
+            next = stations[stations.length - 1];
           }
         }
       }
       if (next) {
         this.selectStation(next);
       } else {
-        this.selectStation(this.searchResult[this.searchResult.length - 1]);
+        this.selectStation(stations[stations.length - 1]);
       }
     }
   }
@@ -341,7 +357,8 @@ export class RadioBrowserService {
         });
       }
       this.audio.autoplay = true;
-      this.audio.crossOrigin = 'anonymous';
+      // this.audio.crossorigin = 'anonymous';
+      // this.audio.crossOrigin = 'anonymous';
       this.audio.src = this.streamUrl;
       window['radio'].audio = this.audio;
       window['radio'].station = this.station;

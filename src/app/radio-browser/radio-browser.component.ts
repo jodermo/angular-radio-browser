@@ -8,8 +8,7 @@ import { RadioBrowserService } from './services/radio-browser.service';
 })
 export class RadioBrowserComponent implements OnInit {
   @Output() onPlay = new EventEmitter<HTMLAudioElement>();
-  showFavorites = false;
-
+  extendedFilter = false;
 
   constructor(public radio: RadioBrowserService) {
   }

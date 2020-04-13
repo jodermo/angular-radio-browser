@@ -1,5 +1,5 @@
 
-.favorite-star, .search-icon {
+.favorite-star, .search-icon  {
   position: relative;
 
   &:before {
@@ -51,6 +51,29 @@
 
   &.active {
     color: #ff004f;
+    opacity: 1;
+    transform: scale(1.2);
+
+    &:hover:after {
+      color: #ffffff;
+      content: '🛇';
+      transform: scale(1.5);
+      opacity: .5;
+    }
+  }
+}
+
+.filter-options-icon {
+  position: relative;
+  font-size: 2rem !important;
+  padding: 0 !important;
+
+  &:before {
+    content: '⛭';
+  }
+
+  &.active {
+    color: #ffffff;
     opacity: 1;
     transform: scale(1.2);
 
@@ -177,7 +200,7 @@
     }
 
     .audio-player-filter {
-      background: #000;
+      background: rgba(0, 0, 0, 0.5);
 
       .filter-group {
 
@@ -193,7 +216,7 @@
         display: flex;
         padding: .75rem 0 .5rem 0;
 
-        span {
+        &> span {
           position: absolute;
           padding: 0 .5rem;
           text-align: right;
@@ -203,7 +226,7 @@
 
         input, select {
           margin: 0 .25rem 0 0;
-          padding: .25rem;
+          padding: .5rem;
 
           &:last-child {
             margin-right: 0;

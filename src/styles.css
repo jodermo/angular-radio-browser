@@ -140,10 +140,27 @@ button span, input[type="submit"] span {
   height: 100%;
   padding-bottom: 3rem;
 }
+.start-view .logo {
+  width: 180px;
+  height: auto;
+  margin: .5rem auto;
+}
 
-.start-view h3 {
+.start-view h1 {
+  font-size: 3rem;
+  line-height: 3.1rem;
+  margin: 0;
+  padding: 0;
+}
+.start-view h2 {
   font-size: 2rem;
-  line-height: 2.2rem;
+  line-height: 2.1rem;
+  margin: .5rem 0;
+  padding: 0;
+}
+.start-view h3 {
+  font-size: 1rem;
+  line-height: 1.1rem;
 }
 
 .start-view label {
@@ -182,9 +199,6 @@ button span, input[type="submit"] span {
     font-size: 10px;
     line-height: 11px;
   }
-  .extended-filter{
-    display: none !important;
-  }
 
   .app-content {
     padding-bottom: 0;
@@ -196,6 +210,25 @@ button span, input[type="submit"] span {
 
   .copyright-repository, .copyright-email{
     display: none;
+  }
+
+  .start-view .logo {
+    width: 120px;
+    height: auto;
+    margin: .5rem auto;
+  }
+
+  .start-view h1 {
+    font-size: 2rem;
+    line-height: 2.1rem;
+  }
+  .start-view h2 {
+    font-size: 1.5rem;
+    line-height: 1.6rem;
+  }
+  .start-view h3 {
+    font-size: 1rem;
+    line-height: 1.1rem;
   }
 
 }

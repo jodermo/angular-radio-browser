@@ -6,16 +6,20 @@
   color: #fff;
   padding: .25rem;
   font-size: 1.5rem;
-  line-height:1.6rem;
+  line-height: 1.6rem;
+  text-align: center;
 
 }
-.radio-header + .radio-body{
+
+.radio-header + .radio-body {
   background: #005c7c;
 }
+
 .radio-body {
   position: relative;
   width: 100%;
   height: auto;
+  min-height: 140px;
   max-height: 500px;
   display: flex;
   padding: .25rem;
@@ -73,7 +77,14 @@
 }
 
 @media (max-width: 1024px) {
+  .radio-header{
+    font-size: 1rem !important;
+  }
   .radio-body {
+    min-height: 120px;
+
+
+
     .radio-thumbnail {
       width: 60px;
 
