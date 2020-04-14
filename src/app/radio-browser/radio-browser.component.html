@@ -21,17 +21,17 @@
       </div>
       <div class="audio-player-controls horizontal-flex">
         <button class="prev-button" (click)="radio.selectPrevStation()">
-          ⏮
+          <div class="icon-arrow-left"></div>
         </button>
         <button class="play-button" *ngIf="radio.stationReady && radio.audio && radio.audio.paused"
                 (click)="radio.togglePause()"
                 [ngClass]="{inactive:(!radio.audio || !radio.audio.paused)}">
-          ►
+          <div class="icon-play"></div>
         </button>
         <button class="pause-button" *ngIf="radio.stationReady && radio.audio && !radio.audio.paused"
                 (click)="radio.togglePause()"
                 [ngClass]="{inactive:(!radio.audio || radio.audio.paused)}">
-          ❙❙
+          <div class="icon-pause"></div>
         </button>
         <div *ngIf="!radio.stationReady" class="button-placeholder-small"></div>
         <div class="progress-info" [ngClass]="{loading:(!radio.stationReady), paused:(radio.audio.paused)}">
@@ -42,11 +42,11 @@
         </div>
         <button class="mute-button" *ngIf="radio.stationReady" (click)="radio.toggleMute()"
                 [ngClass]="{inactive:(!radio.audio), active: (radio.audio.volume <= 0)}">
-          🔇
+          <div class="icon-mute"></div>
         </button>
         <div *ngIf="!radio.stationReady" class="button-placeholder-small"></div>
         <button class="prev-button" (click)="radio.selectNextStation()">
-          ⏭
+          <div class="icon-arrow-right"></div>
         </button>
       </div>
     </div>
@@ -121,7 +121,7 @@
 </div>
 <div class="start-view" *ngIf="!radio.firstSearch">
   <div class="inside">
-    <img class="logo" src="/assets/images/radio.png" alt="mucke.online"/>
+    <img class="logo" src="/assets/svg/radio.svg" alt="mucke.online"/>
     <h1>mucke.online</h1>
     <h2>radio-browser</h2>
     <h3>Search Radio Station</h3>

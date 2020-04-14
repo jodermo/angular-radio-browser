@@ -14,6 +14,7 @@
   <div class="radio-thumbnail small">
     <img *ngIf="station.favicon" class="radio-favicon" [src]="station.favicon"
          (error)="radio.errorStationThumbnail($event)"/>
+    <img *ngIf="!station.favicon" class="radio-favicon" [src]="radio.defaultStationThumbnail"/>
   </div>
   <span class="favorite-star" [ngClass]="{active:(radio.stationIsFavorite(station))}"
         (click)="radio.toggleFavoriteStation(station, $event)"></span>
@@ -35,6 +36,7 @@
   <div class="radio-thumbnail">
     <img *ngIf="station.favicon" class="radio-favicon" [src]="station.favicon"
          (error)="radio.errorStationThumbnail($event)"/>
+    <img *ngIf="!station.favicon" class="radio-favicon" [src]="radio.defaultStationThumbnail"/>
   </div>
   <div class="radio-info">
     <div class="favorite-star" [ngClass]="{active:(radio.stationIsFavorite(station))}"

@@ -76,6 +76,8 @@
 
   &.grid-layout {
     flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
 
     .radio-thumbnail {
       margin: 0 auto;
@@ -96,9 +98,11 @@
       padding: 0;
       flex: 1;
       border-left: none;
-
       text-align: center;
-
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      font-size: .7rem;
       .radio-name {
         position: relative;
         top: 0;

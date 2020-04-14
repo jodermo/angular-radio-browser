@@ -20,7 +20,7 @@ export class RadioBrowserService {
     url: 'api.radio-browser.info/json',
     subdomains: ['de1'],
   };
-  defaultStationThumbnail = '/assets/images/radio_placeholder.png';
+  defaultStationThumbnail = '/assets/svg/radio.svg';
   searchApiUrl = 'https://de1.api.radio-browser.info/json';
   connectionTimeout = 5000;
   filter = {
@@ -378,7 +378,7 @@ export class RadioBrowserService {
               }
             },
             {
-              title: 'Try next station ⏭', event: () => {
+              title: 'Try next station', event: () => {
                 this.hideInfoOverlay();
                 this.selectNextStation();
               }
