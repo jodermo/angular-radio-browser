@@ -1,0 +1,19 @@
+<div class="start-view" *ngIf="!radio.firstSearch">
+  <div class="inside">
+    <app-image [src]="'assets/svg/radio.svg'" [alt]="'mucke.online'" [width]="160" ></app-image>
+    <h1>mucke.online</h1>
+    <h2>radio-browser</h2>
+    <h3>Search Radio Station</h3>
+    <div class="audio-player-filter">
+      <div class="filter-group">
+        <label *ngIf="radio.currentFilterType && radio.currentFilterType.filterBy">
+          <input *ngIf="!radio.currentFilterType || !radio.currentFilterType.options" type="text"
+                 [(ngModel)]="radio.filter.value"
+                 placeholder="Station Name" (keydown.enter)="radio.searchStations()" />
+          <input type="submit" value="Search" (click)="radio.searchStations()" />
+        </label>
+      </div>
+    </div>
+  </div>
+  <app-copyright></app-copyright>
+</div>

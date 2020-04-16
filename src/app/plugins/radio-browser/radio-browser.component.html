@@ -1,0 +1,140 @@
+<div class="web-radio" *ngIf="radio.firstSearch" [ngClass]="{blur:(radio.showOverlay)}">
+  <div class="inside">
+    <div class="radio-result-navigation">
+      <button (click)="radio.showFavorites = false" [ngClass]="{active:(!radio.showFavorites)}">
+        <span class="search-icon"></span>
+        Search
+      </button>
+      <button (click)="radio.showFavorites = true"
+              [ngClass]="{active:(radio.showFavorites), inactive:(!radio.favoriteStations.length)}">
+        <span class="favorite-star" [ngClass]="{active:(radio.favoriteStations.length)}"></span>
+        Favorites
+      </button>
+    </div>
+    <div class="audio-player" *ngIf="radio.audio">
+      <div *ngIf="radio.station" class="display">
+        <canvas id="frequencyCanvas"></canvas>
+        <app-radio-station-preview [station]="radio.station" [details]="true"></app-radio-station-preview>
+      </div>
+      <div class="progressbar">
+        <div class="progressbar-fill"
+             [ngStyle]="{'width': ((radio.time / radio.duration) * 100) + '%'}"></div>
+      </div>
+      <div class="audio-player-controls horizontal-flex">
+        <button class="prev-button" (click)="radio.selectPrevStation()">
+          <div class="icon-arrow-left"></div>
+        </button>
+        <button class="play-button" *ngIf="radio.stationReady && radio.audio && radio.audio.paused"
+                (click)="radio.togglePause()"
+                [ngClass]="{inactive:(!radio.audio || !radio.audio.paused)}">
+          <div class="icon-play"></div>
+        </button>
+        <button class="pause-button" *ngIf="radio.stationReady && radio.audio && !radio.audio.paused"
+                (click)="radio.togglePause()"
+                [ngClass]="{inactive:(!radio.audio || radio.audio.paused)}">
+          <div class="icon-pause"></div>
+        </button>
+        <div *ngIf="!radio.stationReady" class="button-placeholder-small"></div>
+        <div class="progress-info" [ngClass]="{loading:(!radio.stationReady), paused:(radio.audio.paused)}">
+          <span *ngIf="radio.stationReady && radio.checkTimeString(radio.timeString)">{{radio.timeString}} </span>
+          <span
+            *ngIf="radio.stationReady && radio.checkTimeString(radio.durationString)">/ {{radio.durationString}}</span>
+          <span *ngIf="!radio.stationReady && !radio.errorText">loading</span>
+          <span *ngIf="!radio.stationReady && radio.errorText">{{radio.errorText}}</span>
+          <span *ngIf="!radio.stationReady && radio.selectNextStationSeconds">(next in {{radio.selectNextStationSeconds}})</span>
+        </div>
+        <button class="mute-button" *ngIf="radio.stationReady" (click)="radio.toggleMute()"
+                [ngClass]="{inactive:(!radio.audio), active: (radio.audio.volume <= 0)}">
+          <div class="icon-mute"></div>
+        </button>
+        <div *ngIf="!radio.stationReady" class="button-placeholder-small"></div>
+        <button class="prev-button" (click)="radio.selectNextStation()">
+          <div class="icon-arrow-right"></div>
+        </button>
+      </div>
+    </div>
+    <div class="audio-player-filter" >
+      <div class="filter-group">
+        <label *ngIf="radio.currentFilterType && radio.currentFilterType.filterBy" style="flex: 8;">
+          <span>Search</span>
+          <input style="flex:2;" *ngIf="!radio.currentFilterType || !radio.currentFilterType.options" type="text"
+                 [(ngModel)]="radio.filter.value"
+                 placeholder="Station Name" (keydown.enter)="radio.searchStations(); searchInput.blur()" #searchInput/>
+          <input type="submit" value="Search" (click)="radio.searchStations()" />
+        </label>
+        <label style="flex: 1;">
+          <button [ngClass]="{active:(extendedFilter)}" (click)="extendedFilter = !extendedFilter" >
+            <span class="filter-options-icon" [ngClass]="{active:(extendedFilter)}" ></span>
+          </button>
+        </label>
+        <label style="flex: 1;">
+          <button [ngClass]="{active:(radio.listLayout !== 'grid-layout')}" (click)="radio.toggleGridLayout()" >
+            <span class="list-icon" [ngClass]="{active:(radio.listLayout !== 'grid-layout')}" ></span>
+          </button>
+        </label>
+      </div>
+      <div class="filter-group extended-filter" *ngIf="extendedFilter">
+        <label>
+          <span>Search for</span>
+          <select [(ngModel)]="radio.filter.by" (change)="radio.searchStations()">
+            <option *ngFor="let by of radio.currentFilterType.filterBy" [value]="by">{{by}}</option>
+          </select>
+        </label>
+        <label>
+          <span>Sort by</span>
+          <select [(ngModel)]="radio.filter.order" (change)="radio.searchStations()">
+            <option *ngFor="let orderType of radio.oderTypes" [value]="orderType">{{orderType}}</option>
+          </select>
+        </label>
+        <label>
+          <span>Limit</span>
+          <input type="number" [(ngModel)]="radio.filter.limit" (change)="radio.searchStations()"
+                 (keyup)="radio.searchStations()"/>
+        </label>
+        <label>
+          <button (click)="radio.onF1()">i</button>
+        </label>
+      </div>
+    </div>
+    <div class="radio-search-results {{radio.listLayout}}" *ngIf="!radio.showFavorites">
+      <ul class="radio-search-results-list" *ngIf="radio.searchResult">
+        <li *ngFor="let resultStation of radio.searchResult" class="radio-search-results-item"
+            id="radio_{{resultStation.stationuuid}}"
+            (click)="radio.selectStation(resultStation)"
+            [ngClass]="{active: (radio.stationActive(resultStation))}">
+          <app-radio-station-preview [station]="resultStation" [layout]="radio.listLayout"></app-radio-station-preview>
+        </li>
+        <li>
+          Searching data from "radio-browser.info": <a href="http://www.radio-browser.info" target="_blank">www.radio-browser.info</a><br>
+        </li>
+      </ul>
+    </div>
+    <div class="radio-search-results {{radio.listLayout}}" *ngIf="radio.showFavorites">
+      <ul class="radio-search-results-list" *ngIf="radio.favoriteStations">
+        <li class="radio-search-results-item" *ngFor="let resultStation of radio.favoriteStations"
+            id="radio_{{resultStation.stationuuid}}"
+            (click)="radio.selectStation(resultStation)"
+            [ngClass]="{active: (radio.stationActive(resultStation))}">
+          <app-radio-station-preview [station]="resultStation" [layout]="radio.listLayout"></app-radio-station-preview>
+        </li>
+        <li>
+          Searching data from "radio-browser.info": <a href="http://www.radio-browser.info" target="_blank">www.radio-browser.info</a><br>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<app-start-view [radio]="radio" *ngIf="!radio.firstSearch"></app-start-view>
+<div class="overlay" *ngIf="radio.showOverlay">
+  <div class="inside">
+    <button class="close-button" (click)="radio.hideInfoOverlay()">X</button>
+    <h3 *ngIf="radio.overlayTitle">{{radio.overlayTitle}}</h3>
+    <p *ngIf="radio.overlayTitle" [innerText]="radio.overlayText">
+    </p>
+    <div class="overlay-buttons" *ngIf="radio.overlayButtons">
+      <span style="flex: 1;" *ngIf="radio.selectNextStationSeconds"><i>next in {{radio.selectNextStationSeconds}}s</i></span>
+      <button *ngFor="let button of radio.overlayButtons" (click)="button.event()">{{button.title}}</button>
+    </div>
+  </div>
+</div>
+

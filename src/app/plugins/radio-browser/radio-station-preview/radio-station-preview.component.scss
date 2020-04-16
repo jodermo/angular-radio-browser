@@ -1,0 +1,143 @@
+@import "../radio-browser.component";
+
+.radio-header {
+  width: 100%;
+  background: #000;
+  color: #fff;
+  padding: .25rem;
+  font-size: 1.5rem;
+  line-height: 1.6rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.radio-header + .radio-body {
+  min-height: 140px;
+  background: rgba(0, 92, 124, 0.75);
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
+  .radio-thumbnail img{
+    filter: drop-shadow(0 0 2px  rgba(0, 0, 0, 0.8));
+  }
+}
+
+.radio-body {
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  display: flex;
+  padding: .25rem;
+  transition: all .5s ease;
+
+  .favorite-star {
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
+  }
+
+  .radio-thumbnail {
+    position: relative;
+    width: 120px;
+    height: auto;
+    padding: .5rem;
+
+    &.small {
+      width: 64px;
+    }
+
+    .radio-favicon {
+      display: inline-block;
+      width: 100%;
+      height: auto;
+    }
+
+  }
+
+
+  .radio-info {
+    position: relative;
+    padding: 0 .5rem;
+    flex: 1;
+    border-left: 1px solid #fff;
+
+
+    .radio-name {
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    table {
+      font-size: .7rem;
+      color: #ccc;
+    }
+
+    th {
+      text-align: right;
+
+    }
+  }
+
+  &.grid-layout {
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+
+    .radio-thumbnail {
+      margin: 0 auto;
+
+      &.small {
+        padding: 0;
+        margin-bottom: .25rem;
+
+      }
+    }
+
+    .favorite-star {
+      position: absolute;
+      top: .5rem;
+    }
+
+    .radio-info {
+      padding: 0;
+      flex: 1;
+      border-left: none;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      font-size: .7rem;
+      .radio-name {
+        position: relative;
+        top: 0;
+        transform: translateY(0);
+      }
+
+      .radio-tags {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .radio-header {
+    font-size: 1rem !important;
+  }
+  .radio-header + .radio-body {
+    min-height: 120px;
+  }
+  .radio-body {
+
+    .radio-thumbnail {
+      width: 60px;
+
+      &.small {
+        width: 32px;
+      }
+
+    }
+
+
+  }
+}

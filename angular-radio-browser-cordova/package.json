@@ -1,0 +1,39 @@
+{
+  "name": "mucke.online",
+  "displayName": "mucke.online - radio browser",
+  "version": "1.0.0",
+  "description": "no ads, no registration, just enjoy free online radio from around the world",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run angularfix && cordova build android --debug",
+    "build:device": "npm run angularfix && cordova run android --device --debug",
+    "build:device:log": "npm run angularfix && cordova run android --device && adb -d logcat chromium:I *:S",
+    "build:release": "npm run angularfix && cordova build --release android -- --versionCode=3",
+    "angularfix": "npm run replace_scripttag && npm run replace_asseturl_es5 && npm run replace_asseturl_es2015",
+    "replace_scripttag": "cscript replace.vbs \".\\www\\index.html\" \"<script src=\" \"<script type=\"text/javascript\" src=\"",
+    "replace_asseturl_es5": "cscript replace.vbs \".\\www\\main-es5.js\" \"/assets\" \"assets\"",
+    "replace_asseturl_es2015": "cscript replace.vbs \".\\www\\main-es2015.js\" \"/assets\" \"assets\""
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "Moritz Petzka",
+  "license": "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.",
+  "dependencies": {
+    "cordova-android": "^8.1.0",
+    "cordova-plugin-music-controls": "git+https://github.com/amitkhare/cordova-music-controls-plugin.git"
+  },
+  "devDependencies": {
+    "cordova-plugin-whitelist": "^1.3.4"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-music-controls": {}
+    },
+    "platforms": [
+      "android"
+    ]
+  }
+}

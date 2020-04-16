@@ -1,0 +1,15 @@
+<section class="app-wrapper mobile-app">
+  <main class="app-content">
+    <app-radio-browser [ngClass]="{blur:(showAbout)}"></app-radio-browser>
+    <div class="overlay" *ngIf="showAbout">
+      <div class="inside">
+        <button class="close-button" (click)="showAbout = false">X</button>
+        <app-about></app-about>
+      </div>
+    </div>
+  </main>
+  <footer class="app-footer">
+    <button (click)="clearStorage()" style="float: left;">Clear storage</button>
+    <button (click)="showAbout = !showAbout" style="float: right;" [ngClass]="{active:(showAbout)}">About</button>
+  </footer>
+</section>

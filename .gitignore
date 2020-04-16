@@ -1,7 +1,15 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# cordova files
+
+/angular-radio-browser-cordova/node_modules
+/angular-radio-browser-cordova/platforms/
+/angular-radio-browser-cordova/www/
+/angular-radio-browser-cordova/build.json
+
 # compiled output
 /dist
+/material
 /tmp
 /out-tsc
 # Only exists if Bazel was run

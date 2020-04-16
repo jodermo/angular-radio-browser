@@ -4,10 +4,18 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --crossOrigin=\"anonymus\"",
+    "build:cordova": "ng build --outputPath=\"angular-radio-browser-cordova/www/\" && npm run cordova",
+    "build:cordova:device": "ng build --outputPath=\"angular-radio-browser-cordova/www/\" && npm run cordova:device",
+    "build:cordova:device:log": "ng build --outputPath=\"angular-radio-browser-cordova/www/\" && npm run cordova:device:log",
+    "build:cordova:release": "ng build --outputPath=\"angular-radio-browser-cordova/www/\" && npm run cordova:release",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "cordova": "cd angular-radio-browser-cordova && npm run build",
+    "cordova:device": "cd angular-radio-browser-cordova && npm run build:device",
+    "cordova:device:log": "cd angular-radio-browser-cordova && npm run build:device:log",
+    "cordova:release": "cd angular-radio-browser-cordova && npm run build:release"
   },
   "private": true,
   "dependencies": {
@@ -19,6 +27,12 @@
     "@angular/platform-browser": "~9.1.0",
     "@angular/platform-browser-dynamic": "~9.1.0",
     "@angular/router": "~9.1.0",
+    "@ionic-native/core": "^5.23.0",
+    "@ionic-native/media": "^5.23.0",
+    "@ionic-native/music-controls": "^5.23.0",
+    "@ionic/angular-toolkit": "^2.2.0",
+    "cordova-plugin-music-controls2": "^3.0.3",
+    "device-detector-js": "^2.2.1",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
