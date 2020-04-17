@@ -1,0 +1,18 @@
+{
+  "cordova-plugin-whitelist": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-whitelist@1"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-music-controls": {
+    "source": {
+      "type": "registry",
+      "id": "https://github.com/amitkhare/cordova-music-controls-plugin"
+    },
+    "is_top_level": true,
+    "variables": {}
+  }
+}

@@ -1,14 +1,18 @@
 import { Component } from '@angular/core';
 import { AppService } from './services/app.service';
+import { AppConfig } from './config/app.config';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.mobile.html', // mobile app
- // templateUrl: './app.component.html', // web app
+   templateUrl: './app.component.mobile.html', // mobile app
+  //templateUrl: './app.component.html', // web app
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  config: AppConfig = new AppConfig();
+  visuals = this.config.audioVisuals;
   showAbout = false;
+
 
   constructor(public app: AppService) {
 

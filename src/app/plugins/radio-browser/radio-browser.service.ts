@@ -4,13 +4,15 @@ import { throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AppService } from '../../services/app.service';
 import { MusicControls } from '@ionic-native/music-controls/ngx';
+import { AppConfig } from '../../config/app.config';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class RadioBrowserService {
-  mobileApp = true;
+  config: AppConfig = new AppConfig();
+  mobileApp = this.config.mobileApp;
   API = {
     protocol: 'https',
     url: 'api.radio-browser.info/json',
@@ -422,6 +424,7 @@ export class RadioBrowserService {
     if (this.streamUrl) {
       this.stationReady = false;
       this.errorText = null;
+      this.selectNextStationSeconds = 0;
       if (!this.audio) {
         this.audio = new Audio();
         this.audio.addEventListener('play', (e) => {

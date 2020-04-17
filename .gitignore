@@ -2,10 +2,10 @@
 
 # cordova files
 
-/angular-radio-browser-cordova/node_modules
-/angular-radio-browser-cordova/platforms/
-/angular-radio-browser-cordova/www/
-/angular-radio-browser-cordova/build.json
+/cordova-app/node_modules
+/cordova-app/platforms
+/cordova-app/www
+/cordova-app/build.json
 
 # compiled output
 /dist
