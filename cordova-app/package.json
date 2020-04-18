@@ -6,10 +6,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run angularfix && cordova build android --debug",
-    "build:device": "npm run angularfix && cordova run android --device --debug",
-    "build:device:log": "npm run angularfix && cordova run android --device --prod --debug && adb -d logcat chromium:I *:S",
-    "build:release": "npm run angularfix && cordova build --prod --release  android -- --versionCode=4",
+    "ng:build": "npm run angularfix && npm run build",
+    "ng:build:device": "npm run angularfix && npm run build:device",
+    "ng:build:device:log": "npm run angularfix && npm run build:device:log",
+    "ng:build:release": "npm run angularfix && npm run build:release",
+    "build": "cordova build android --debug",
+    "build:device": "cordova run android --device --debug",
+    "build:device:log": "cordova run android --device --prod --debug && adb -d logcat chromium:I *:S",
+    "build:release": "cordova build --prod --release  android -- --versionCode=7",
     "angularfix": "npm run replace_scripttag && npm run replace_asseturl_es5 && npm run replace_asseturl_es2015",
     "replace_scripttag": "cscript replace.vbs \".\\www\\index.html\" \"<script src=\" \"<script type=\"text/javascript\" src=\"",
     "replace_asseturl_es5": "cscript replace.vbs \".\\www\\main-es5.js\" \"/assets\" \"assets\"",
@@ -22,7 +26,8 @@
   "license": "Apache-2.0",
   "dependencies": {
     "cordova-android": "^8.1.0",
-    "cordova-plugin-music-controls": "git+https://github.com/amitkhare/cordova-music-controls-plugin.git"
+    "cordova-plugin-music-controls": "git+https://github.com/amitkhare/cordova-music-controls-plugin.git",
+    "cordova-plugin-network-information": "^2.0.2"
   },
   "devDependencies": {
     "cordova-plugin-whitelist": "^1.3.4"
@@ -30,7 +35,8 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},
-      "cordova-plugin-music-controls": {}
+      "cordova-plugin-music-controls": {},
+      "cordova-plugin-network-information": {}
     },
     "platforms": [
       "android"

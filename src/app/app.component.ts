@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { AppService } from './services/app.service';
 import { AppConfig } from './config/app.config';
 
+
 @Component({
   selector: 'app-root',
-   templateUrl: './app.component.mobile.html', // mobile app
-  //templateUrl: './app.component.html', // web app
+  templateUrl: './app.component.mobile.html',
+  // templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
@@ -13,9 +14,7 @@ export class AppComponent {
   visuals = this.config.audioVisuals;
   showAbout = false;
 
-
   constructor(public app: AppService) {
-
   }
 
   clearStorage() {

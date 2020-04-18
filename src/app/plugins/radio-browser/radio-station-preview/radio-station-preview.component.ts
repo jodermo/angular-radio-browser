@@ -4,7 +4,7 @@ import { RadioBrowserService } from '../radio-browser.service';
 @Component({
   selector: 'app-radio-station-preview',
   templateUrl: './radio-station-preview.component.html',
-  styleUrls: ['./radio-station-preview.component.scss'],
+  styleUrls: ['../radio-browser.component.scss'],
 })
 export class RadioStationPreviewComponent implements OnInit {
   @Input() station = null;

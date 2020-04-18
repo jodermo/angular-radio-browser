@@ -21,6 +21,7 @@ export class RadioBrowserService {
   defaultStationThumbnail = 'assets/svg/radio.svg';
   searchApiUrl = 'https://de1.api.radio-browser.info/json';
   connectionTimeout = 5000;
+  disallowedPrefixes = ['.m3u8', '.m3u', '?mp=/stream', '.pls'];
   filter = {
     type: 'stations',
     by: 'name',
@@ -42,6 +43,7 @@ export class RadioBrowserService {
   oderTypes = ['name', 'country', 'language', 'tags']; // old: ['name', 'url', 'homepage', 'favicon', 'tags', 'country', 'state', 'language', 'votes', 'negativevotes', 'codec', 'bitrate', 'lastcheckok', 'lastchecktime', 'clicktimestamp', 'clickcount', 'clicktrend'];
   currentFilterType = this.filterTypes[0];
   lastSearchQuery;
+  resultData = [] as any;
   searchResult = [] as any;
   searching = false;
   firstSearch = false;
@@ -50,6 +52,7 @@ export class RadioBrowserService {
   station = null;
   stationReady = false;
   favoriteStations = [];
+  inactiveStations = [];
   lastVolume = 1;
   duration = 0;
   durationString = null;
@@ -63,6 +66,7 @@ export class RadioBrowserService {
   visuals = false;
   ready = false;
   showFavorites = false;
+  showInactive = false;
   showOverlay = false;
   overlayTitle = '';
   overlayText = '';
@@ -78,6 +82,12 @@ export class RadioBrowserService {
 
   constructor(private http: HttpClient, private musicControls: MusicControls) {
     this.localStorageSupport = this.localStorageIsSupported(() => localStorage);
+    document.addEventListener('offline', () => {
+      this.onOffline();
+    }, false);
+    document.addEventListener('online', () => {
+      this.onOnline();
+    }, false);
     window.addEventListener('keydown', evt => {
       switch (evt.keyCode) {
         //ESC
@@ -95,6 +105,21 @@ export class RadioBrowserService {
       //Returning false overrides default browser event
       return false;
     });
+  }
+
+  onOffline() {
+    this.showInfoOverlay('no network connection', 'Device Offline', [
+      {
+        title: 'OK', event: () => {
+          this.hideInfoOverlay();
+        }
+      }
+    ]);
+  }
+
+  onOnline() {
+    this.hideInfoOverlay();
+    this.startStream();
   }
 
   onEsc() {
@@ -134,6 +159,7 @@ export class RadioBrowserService {
     if (layout) {
       this.listLayout = layout;
     }
+    this.getInactiveStations();
     this.getFavoriteStations();
     if (searchQuery) {
       this.selectFilterByType(this.filter.type || this.filterTypes[0].name);
@@ -245,9 +271,27 @@ export class RadioBrowserService {
 
   }
 
+  filterResult(resultData = this.resultData) {
+    return resultData.filter(station => {
+      for (const prefix of this.disallowedPrefixes) {
+        for (const inactive of this.inactiveStations) {
+          if (station.stationuuid === inactive.stationuuid) {
+            return false;
+          }
+        }
+        if (station.url && (station.url as string).includes(prefix)) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }
+
   showResult(resultData, searchQuery) {
     this.lastSearchQuery = searchQuery;
-    this.searchResult = resultData;
+    this.resultData = resultData;
+    this.searchResult = this.filterResult(resultData);
     this.firstSearch = true;
   }
 
@@ -273,14 +317,21 @@ export class RadioBrowserService {
   }
 
   selectStation(station: any) {
+
+
     if (this.localStorageSupport) {
       localStorage.setItem('radio-station-name', station.name || null);
+    }
+    if (this.selectNextStationTimeout) {
+      clearTimeout(this.selectNextStationTimeout);
     }
     this.removeStream();
     this.station = station;
     this.streamUrl = station.url;
     this.scrollToStation(station);
     this.startStream();
+
+
   }
 
   stationActive(station: any) {
@@ -303,12 +354,73 @@ export class RadioBrowserService {
     event.target.src = this.defaultStationThumbnail;
   }
 
+  /* inactive stations */
+  getInactiveStations() {
+    if (this.localStorageSupport) {
+      const stations = localStorage.getItem('radio-inactive-stations');
+      this.inactiveStations = JSON.parse(stations) || [];
+    }
+  }
+
+  stationIsInactive(station: any) {
+    for (const fStation of this.inactiveStations) {
+      if (fStation.stationuuid === station.stationuuid) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  setInactiveStation(station: any, event: Event = null) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    if (!this.stationIsInactive(station)) {
+      this.inactiveStations.push(station);
+      if (this.localStorageSupport) {
+        localStorage.setItem('radio-inactive-stations', JSON.stringify(this.inactiveStations));
+      }
+    }
+    this.getFavoriteStations();
+    this.searchResult = this.filterResult(this.resultData);
+  }
+
+  unsetInactiveStation(station: any, event: Event = null) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    for (let i = 0; i < this.inactiveStations.length; i++) {
+      if (this.inactiveStations[i].stationuuid === station.stationuuid) {
+        this.inactiveStations.splice(i, 1);
+      }
+    }
+    if (this.localStorageSupport) {
+      localStorage.setItem('radio-inactive-stations', JSON.stringify(this.inactiveStations));
+    }
+    this.getFavoriteStations();
+    this.searchResult = this.filterResult(this.resultData);
+  }
+
+  toggleInactiveStation(station: any, event: Event = null) {
+    if (!this.stationIsInactive(station)) {
+      this.setInactiveStation(station, event);
+    } else {
+      this.unsetInactiveStation(station, event);
+    }
+  }
+
+
+  /* favorite stations */
+
   getFavoriteStations() {
     if (this.localStorageSupport) {
       const stations = localStorage.getItem('radio-favorite-stations');
-      this.favoriteStations = JSON.parse(stations) || [];
+      this.favoriteStations = this.filterResult(JSON.parse(stations) || [])
     }
   }
+
 
   stationIsFavorite(station: any) {
     for (const fStation of this.favoriteStations) {
@@ -318,6 +430,7 @@ export class RadioBrowserService {
     }
     return false;
   }
+
 
   setFavoriteStation(station: any, event: Event = null) {
     if (event) {
@@ -376,11 +489,13 @@ export class RadioBrowserService {
     let stations = this.searchResult;
     if (this.showFavorites && this.favoriteStations) {
       stations = this.favoriteStations;
+    } else if (this.showInactive && this.inactiveStations) {
+      stations = this.inactiveStations;
     }
     if (this.station && stations) {
       let next = null;
       for (let i = 0; i < stations.length; i++) {
-        if (stations[i] === this.station) {
+        if (stations[i].stationuuid === this.station.stationuuid) {
           if (i < stations.length - 1) {
             next = stations[i + 1];
           } else {
@@ -400,11 +515,13 @@ export class RadioBrowserService {
     let stations = this.searchResult;
     if (this.showFavorites && this.favoriteStations) {
       stations = this.favoriteStations;
+    } else if (this.showInactive && this.inactiveStations) {
+      stations = this.inactiveStations;
     }
     if (this.station && stations) {
       let next = null;
       for (let i = 0; i < stations.length; i++) {
-        if (stations[i] === this.station) {
+        if (stations[i].stationuuid === this.station.stationuuid) {
           if (i > 0) {
             next = stations[i - 1];
           } else {
@@ -523,10 +640,11 @@ export class RadioBrowserService {
             this.selectNextStation();
             break;
           case 'music-controls-headset-unplugged':
-            // Do something
+            if (this.audio) {
+              this.audio.pause();
+            }
             break;
           case 'music-controls-headset-plugged':
-            // Do something
             break;
           default:
             break;
@@ -552,12 +670,20 @@ export class RadioBrowserService {
 
     this.showInfoOverlay(message, 'Error ' + errorCode, [
       {
-        title: 'Abort', event: () => {
+        title: 'OK', event: () => {
           this.hideInfoOverlay();
         }
       },
       {
-        title: 'Next station', event: () => {
+        title: 'Hide', event: () => {
+          const station = this.station;
+          this.selectNextStation();
+          this.setInactiveStation(station);
+          this.hideInfoOverlay();
+        }
+      },
+      {
+        title: 'Next', event: () => {
           this.hideInfoOverlay();
           this.selectNextStation();
         }

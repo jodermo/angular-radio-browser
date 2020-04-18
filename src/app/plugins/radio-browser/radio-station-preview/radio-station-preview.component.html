@@ -12,12 +12,18 @@
 </div>
 <div class="radio-body {{layout}}" *ngIf="!details">
   <div class="radio-thumbnail small">
+      <span
+        *ngIf="layout !== 'grid-layout' && (radio.stationActive(station) ||  radio.showFavorites || (radio.showInactive && radio.stationIsFavorite(station)))"
+        class="favorite-star" [ngClass]="{active:(radio.stationIsFavorite(station))}"
+        (click)="radio.toggleFavoriteStation(station, $event)"></span>
     <img *ngIf="station.favicon" class="radio-favicon" [src]="station.favicon"
          (error)="radio.errorStationThumbnail($event)"/>
     <img *ngIf="!station.favicon" class="radio-favicon" [src]="radio.defaultStationThumbnail"/>
   </div>
-  <span class="favorite-star" [ngClass]="{active:(radio.stationIsFavorite(station))}"
-        (click)="radio.toggleFavoriteStation(station, $event)"></span>
+  <span
+    *ngIf="layout === 'grid-layout' && (radio.stationActive(station) ||  radio.showFavorites || (radio.showInactive && radio.stationIsFavorite(station)))"
+    class="favorite-star" [ngClass]="{active:(radio.stationIsFavorite(station))}"
+    (click)="radio.toggleFavoriteStation(station, $event)"></span>
   <div class="radio-info">
     <div class="radio-name">
       <span><b>{{station.name}}</b></span>
@@ -31,16 +37,21 @@
       <span *ngIf="layout !== 'grid-layout' && station.tags">{{station.tags}}</span>
     </div>
   </div>
+  <span *ngIf="radio.stationActive(station) || (radio.showInactive)" class="inactive-icon"
+        [ngClass]="{active:(radio.stationIsInactive(station))}"
+        (click)="radio.toggleInactiveStation(station, $event)"></span>
+
 </div>
 <div class="radio-body {{layout}}" *ngIf="details" (click)="radio.scrollToStation()">
   <div class="radio-thumbnail">
+    <div class="favorite-star" [ngClass]="{active:(radio.stationIsFavorite(station))}"
+         (click)="radio.toggleFavoriteStation(station, $event)"></div>
     <img *ngIf="station.favicon" class="radio-favicon" [src]="station.favicon"
          (error)="radio.errorStationThumbnail($event)"/>
     <img *ngIf="!station.favicon" class="radio-favicon" [src]="radio.defaultStationThumbnail"/>
   </div>
   <div class="radio-info">
-    <div class="favorite-star" [ngClass]="{active:(radio.stationIsFavorite(station))}"
-         (click)="radio.toggleFavoriteStation(station, $event)"></div>
+
     <table>
       <tbody>
       <tr *ngIf="station.ip">
@@ -110,6 +121,10 @@
       </tbody>
     </table>
   </div>
+  <span class="inactive-icon" [ngClass]="{active:(radio.stationIsInactive(station))}"
+        (click)="radio.toggleInactiveStation(station, $event)"></span>
+
+
 </div>
 
 

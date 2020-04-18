@@ -1,11 +1,6 @@
 
-.favorite-star, .search-icon {
+.favorite-star, .search-icon, .inactive-icon {
   position: relative;
-  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8));
-
-  &:before {
-    text-shadow: 0 0 .25rem rgba(0, 0, 0, .75);
-  }
 
   &:after {
     content: '';
@@ -17,7 +12,6 @@
   }
 
   font-size: 1.5rem;
-  float: right;
   margin-left: .5rem;
   cursor: pointer;
   opacity: .5;
@@ -39,7 +33,6 @@
   top: 25%;
   left: 0;
   filter: blur(1px) saturate(2) contrast(2);
-  box-shadow: 0 0 .5rem 0 rgba(0, 0, 0, 1) inset;
 }
 
 .favorite-star {
@@ -53,19 +46,48 @@
   background-position: center center;
 
   &:after {
-    transform: scale(1.5) translateY(25%);
+    transform: scale(1.5) translateY(10%);
   }
 
   &.active {
     background: url('/assets/svg/heart_red.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
     opacity: 1;
+  }
 
+  &:hover {
+    opacity: 1;
+    transform: scale(1.1) translateY(10%);
+  }
+}
 
-    &:hover:after {
-      color: #ffffff;
-      content: '🛇';
-      opacity: .5;
-    }
+.inactive-icon {
+  position: relative;
+  display: inline-block;
+  height: 1.5rem;
+  width: 1.5rem;
+  background: url('/assets/svg/inactive_white.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+
+  &:after {
+    transform: scale(1.5) translateY(25%);
+  }
+
+  &.active {
+    background: url('/assets/svg/inactive_red.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    opacity: 1;
+  }
+
+  &:hover {
+    opacity: 1;
+    transform: scale(1.1) translateY(10%);
   }
 }
 
@@ -170,7 +192,6 @@
       margin: .25rem;
       border-radius: .25rem;
       background: rgba(0, 0, 0, 0.5);
-      box-shadow: 0 0 .25rem 0 rgba(0, 0, 0, 0.5);
       overflow: hidden;
 
       &:hover, &.active {
@@ -185,6 +206,50 @@
   }
 }
 
+.checkbox-container {
+  position: relative;
+  display: flex;
+  padding: 0 .25rem;
+
+
+  .checkbox {
+    position: relative;
+    flex: 1;
+    text-align: center;
+    padding: .25rem .5rem;
+    line-height: 1rem;
+    cursor: pointer;
+
+    &:after {
+      content: 'O';
+      display: inline-block;
+      height: 1.25rem;
+      width: 1.25rem;
+      margin: 0 .5rem;
+      transform: translateY(0.25rem);
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid #005c7c;
+      cursor: pointer;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: transparent;
+      transition: all .25s ease;
+    }
+
+    &.active {
+      font-weight: bold;
+      cursor: default;
+
+      &:after {
+        content: '✓';
+        background: #00c8ff;
+        color: #005c7c;
+        cursor: default;
+      }
+    }
+  }
+}
 
 .overlay {
   position: fixed;
@@ -211,7 +276,6 @@
     text-align: center;
     max-width: 600px;
     margin: 0 auto;
-    box-shadow: 0 0 .5rem 0 rgba(0, 0, 0, 0.5);
     border-radius: .25rem;
     overflow-x: hidden;
     overflow-y: auto;
@@ -233,6 +297,7 @@
 
     .overlay-buttons {
       display: flex;
+
       button {
         flex: 1;
         padding: .5rem;
@@ -367,7 +432,6 @@
 
       label {
         position: relative;
-        width: 100%;
         display: flex;
         padding: .75rem 0 .5rem 0;
 
@@ -377,6 +441,10 @@
           text-align: right;
           transform: translateY(-90%);
           font-size: .5rem;
+        }
+
+        .checkbox-container {
+          flex: 3;
         }
 
         input, select {
@@ -440,6 +508,147 @@ app-radio-preview {
   height: auto;
 }
 
+
+.radio-header {
+  width: 100%;
+  background: #000;
+  color: #fff;
+  padding: .25rem;
+  font-size: 1.5rem;
+  line-height: 1.6rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.radio-header + .radio-body {
+  min-height: 140px;
+  background: rgba(0, 92, 124, 0.75);
+
+  .radio-thumbnail img {
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8));
+  }
+
+
+}
+
+
+.radio-body {
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  display: flex;
+  padding: .25rem;
+  transition: all .5s ease;
+
+
+  .radio-thumbnail {
+    position: relative;
+    width: 120px;
+    height: auto;
+    padding: .5rem;
+
+
+    .favorite-star {
+      position: absolute;
+      top: 0rem;
+      left: -.5rem;
+    }
+
+
+    &.small {
+      width: 64px;
+
+      .favorite-star {
+        position: absolute;
+      }
+    }
+
+    .radio-favicon {
+      display: inline-block;
+      width: 100%;
+      height: auto;
+
+
+    }
+
+  }
+
+
+  .radio-info {
+    padding: 0 .5rem;
+    flex: 1;
+    border-left: 1px solid #fff;
+
+
+    .radio-name {
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    table {
+      font-size: .7rem;
+      color: #ccc;
+    }
+
+    th {
+      text-align: right;
+
+    }
+  }
+
+  &.grid-layout {
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+
+    .radio-thumbnail {
+      margin: 0 auto;
+
+      &.small {
+        padding: 0;
+        margin-bottom: .25rem;
+      }
+    }
+
+    .favorite-star {
+      position: absolute;
+      top: .25rem;
+      left: 0rem;
+    }
+
+    .inactive-icon {
+      position: absolute;
+      top: .25rem;
+      right: .25rem;
+    }
+
+    .radio-info {
+      padding: 0;
+      flex: 1;
+      border-left: none;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      font-size: .6rem;
+      line-height: .8rem;
+
+      .radio-name {
+        position: relative;
+        top: 0;
+        transform: translateY(0);
+      }
+
+      .radio-tags {
+        display: none;
+      }
+    }
+  }
+}
+
+
 @media (max-width: 1024px) {
   .grid-layout {
     .radio-search-results-list {
@@ -449,10 +658,27 @@ app-radio-preview {
       }
     }
   }
-}
+  .radio-header {
+    font-size: 1rem !important;
+  }
+  .radio-header + .radio-body {
+    min-height: 120px;
+  }
+  .radio-body {
 
-@keyframes blink-animation {
-  to {
-    background: #9d0000;
+    .radio-thumbnail {
+      width: 60px;
+
+      &.small {
+        width: 32px;
+      }
+
+    }
+  }
+
+  @keyframes blink-animation {
+    to {
+      background: #9d0000;
+    }
   }
 }
