@@ -6,7 +6,7 @@
 /cordova-app/platforms
 /cordova-app/www
 /cordova-app/build.json
-/cordova-app/*.keystore
+/cordova-app/mucke-online.keystore
 
 
 # compiled output
