@@ -6,6 +6,8 @@
 /cordova-app/platforms
 /cordova-app/www
 /cordova-app/build.json
+/cordova-app/*.keystore
+
 
 # compiled output
 /dist
