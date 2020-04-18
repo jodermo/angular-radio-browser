@@ -1,7 +1,7 @@
 {
   "android": {
     "release": {
-      "keystore": "app_name.keystore",
+      "keystore": "app_name.keystore", // read keystore instruction in "/cordova-app/README.md"
       "storePassword": "password",
       "alias": "app_name",
       "password": "password",
